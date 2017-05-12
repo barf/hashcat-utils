@@ -56,6 +56,8 @@ typedef uint64_t u64;
 #define DLT_IEEE802_11_PRISM 119
 #define DLT_IEEE802_11_RADIO 127
 
+#define DLT_PPI         192   /* Kismet makes these */
+
 struct pcap_file_header {
   u32 magic;
   u16 version_major;
@@ -848,7 +850,8 @@ int main (int argc, char *argv[])
 
   if ((pcap_file_header.linktype != DLT_IEEE802_11)
    && (pcap_file_header.linktype != DLT_IEEE802_11_PRISM)
-   && (pcap_file_header.linktype != DLT_IEEE802_11_RADIO))
+   && (pcap_file_header.linktype != DLT_IEEE802_11_RADIO)
+   && (pcap_file_header.linktype != DLT_PPI))
   {
     fprintf (stderr, "%s: Unsupported linktype detected\n", in);
 
@@ -929,7 +932,7 @@ int main (int argc, char *argv[])
       header.caplen -= prism_header->msglen;
       header.len    -= prism_header->msglen;
     }
-    else if (pcap_file_header.linktype == DLT_IEEE802_11_RADIO)
+    else if (pcap_file_header.linktype == DLT_IEEE802_11_RADIO || DLT_PPI)
     {
       if (header.caplen < sizeof (ieee80211_radiotap_header_t))
       {
